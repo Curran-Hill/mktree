@@ -1,0 +1,27 @@
+#!/bin/bash
+
+REQUIRED_FLAG=false
+proj_name=""
+
+mktree() {
+  mkdir -- "$proj_name"
+  mkdir -- "$proj_name"/{EPT,IPT}
+  mkdir -- "$proj_name"/EPT/{evidence,logs,scans,scope,tools} "$proj_name"/IPT/{evidence,logs,scans,scope,tools}
+  mkdir -- "$proj_name"/EPT/evidence/{credentials,data,screenshots} "$proj_name"/IPT/evidence/{credentials,data,screenshots}
+}
+
+while getopts 'n:' opt; do
+  case "$opt" in
+    n)
+      REQUIRED_FLAG=true
+      proj_name="$OPTARG"
+      mktree
+      ;;
+  esac
+done
+
+if [[ "$REQUIRED_FLAG" = false ]]; then
+  echo "Err: The -n flag is required to specify a project name" >&2
+  echo "Usage: $0 -n <Project_Name>"
+  exit 1
+fi
